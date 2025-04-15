@@ -27,6 +27,23 @@
     <script>
       var canvas = document.querySelector("#unity-canvas");
 
+      // Attempt to lock screen orientation to landscape
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(function(error) {
+            console.warn("Could not lock screen orientation to landscape:", error);
+          });
+        } else if (screen.lockOrientation) { // Older API versions
+          screen.lockOrientation('landscape');
+        } else if (screen.mozLockOrientation) { // Firefox
+          screen.mozLockOrientation('landscape');
+        } else if (screen.msLockOrientation) { // IE/Edge
+          screen.msLockOrientation('landscape');
+        }
+      } catch (error) {
+        console.warn("Screen orientation lock failed:", error);
+      }
+
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
       // If type=='warning', a yellow highlight color is used.
